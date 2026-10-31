@@ -11,14 +11,26 @@ flowchart LR
 ## Revisa tu server
 
 ```bash
-cat /etc/os-release | grep PRETTY_NAME
-uname -m
-nproc
-free -h
-df -h /
+scripts/preflight.sh
 ```
 
-En esta instalación:
+> [!TIP]
+> Si aún no descargaste este repositorio, usa `uname -m`, `nproc`, `free -h` y `df -h /`.
+
+## Arquitectura: qué cambia y qué no
+
+| | ARM64 (`aarch64`) | AMD64/x64 (`x86_64`) |
+|---|---|---|
+| Comandos de esta guía | Iguales | Iguales |
+| Archivo de código fuente | El mismo | El mismo |
+| Archivos de `config/` | Los mismos | Los mismos |
+| Programas compilados | Solo para ARM64 | Solo para AMD64 |
+| `go version` termina en | `linux/arm64` | `linux/amd64` |
+
+> [!IMPORTANT]
+> Compila en la misma arquitectura donde vas a ejecutar: un binario de una no funciona en la otra. [Ver el error](problemas-y-soluciones.md#15-exec-format-error).
+
+En la instalación de referencia (ARM64):
 
 | Dato | Valor |
 |---|---|

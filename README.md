@@ -1,26 +1,65 @@
-# Zabbix 8.0.0rc3 en Ubuntu 26.10 ARM64
+# Zabbix 8.0.0rc3 en Ubuntu: ARM64 y AMD64
 
 ![Zabbix](https://img.shields.io/badge/Zabbix-8.0.0rc3-d40000)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-26.10-e95420)
-![Arquitectura](https://img.shields.io/badge/arquitectura-ARM64-555555)
+![ARM64](https://img.shields.io/badge/ARM64-compatible-555555)
+![AMD64](https://img.shields.io/badge/AMD64%2Fx64-compatible-555555)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18.6-336791)
 ![Nginx](https://img.shields.io/badge/Nginx-1.30.4-009639)
 ![PHP](https://img.shields.io/badge/PHP-8.5.9-777bb4)
 
-Guía paso a paso para instalar **Zabbix 8.0.0rc3** compilándolo desde el código oficial. Los comandos y las salidas provienen de una instalación real.
+Guía paso a paso para instalar **Zabbix 8.0.0rc3** en servidores **ARM64** y **AMD64/x64**. La ruta principal compila desde el código oficial; los comandos y las salidas provienen de una instalación real en ARM64.
 
 > [!WARNING]
 > **RC3 es una versión candidata.** Úsala para probar y aprender, no en producción.
 
-## ¿Es esta la guía que necesitas?
+## ¿Qué camino te toca?
+
+Averigua tu arquitectura:
+
+```bash
+uname -m
+```
+
+| Resultado | Arquitectura | Nombres habituales |
+|---|---|---|
+| `x86_64` | **AMD64** | x64, Intel/AMD de 64 bits |
+| `aarch64` | **ARM64** | AArch64, Apple Silicon en VM, Graviton |
+
+**El camino depende de tu versión de Ubuntu, no de la arquitectura:**
 
 ```mermaid
 flowchart TD
-    A["¿Qué sistema tienes?"] --> B["Ubuntu 26.04 o anterior compatible"]
-    A --> C["Ubuntu 26.10"]
-    B --> D["Usa los paquetes oficiales: es más simple y se actualiza con apt"]
-    C --> E["Sigue esta guía: el paquete del server no se puede instalar"]
+    A["ARM64 o AMD64"] --> B{"¿Qué Ubuntu tienes?"}
+    B -->|"26.04"| C["Paquetes oficiales: más simple y se actualiza con apt"]
+    B -->|"26.10"| D["Compilar desde el código: el paquete del server no se puede instalar"]
 ```
+
+| Ubuntu | Método | Empieza aquí |
+|---|---|---|
+| **26.04** | Paquetes oficiales | [Alternativa con paquetes](docs/alternativa-paquetes-26.04.md) |
+| **26.10** | Compilar desde el código | [Paso 1](docs/01-requisitos.md) |
+
+También puedes dejar que lo revise un script, que no cambia nada en tu server:
+
+```bash
+git clone https://github.com/SimonLexRS/Zabbix-8-rc3-Instalacion.git
+cd Zabbix-8-rc3-Instalacion
+scripts/preflight.sh
+```
+
+## ¿Qué se probó en cada arquitectura?
+
+| Comprobación | ARM64 | AMD64/x64 |
+|---|---|---|
+| Paquetes del paso 2 disponibles en Ubuntu 26.10 | ✅ | ✅ |
+| Compilación e instalación completas | ✅ Ejecutadas | ⚠️ No ejecutadas |
+| `scripts/verificar.sh` | ✅ Ejecutado | ⚠️ No ejecutado |
+| Paquetes oficiales RC3 publicados para 26.04 | ✅ | ✅ |
+| Instalación con paquetes en 26.04 | ⚠️ No ejecutada | ⚠️ No ejecutada |
+
+> [!NOTE]
+> Los comandos de la guía son los mismos en AMD64: no usan rutas ni opciones propias de una arquitectura. Aun así, la instalación real se hizo solo en ARM64. En AMD64, confirma cada resultado con `scripts/verificar.sh`.
 
 **¿Por qué no sirven los paquetes en 26.10?** El paquete `zabbix-server-pgsql` necesita la librería `libsnmp40t64`, pero Ubuntu 26.10 trae `libsnmp45`. [Ver el detalle](docs/problemas-y-soluciones.md#1-el-paquete-del-server-no-se-puede-instalar).
 
@@ -67,13 +106,13 @@ flowchart TD
 | [6. Frontend](docs/06-frontend.md) | Publicar la interfaz web | Página de login visible |
 | [7. Verificación](docs/07-verificacion.md) | Comprobar todo de punta a punta | El host recibe datos |
 
-**¿Algo falló?** Ve a [Problemas y soluciones](docs/problemas-y-soluciones.md).
+**¿Algo falló?** Ve a [Problemas y soluciones](docs/problemas-y-soluciones.md). **¿Quieres revisar todo de una vez?** Ejecuta [`scripts/verificar.sh`](scripts/verificar.sh).
 
-## Entorno de esta instalación
+## Entorno de la instalación de referencia
 
 | Elemento | Valor |
 |---|---|
-| Sistema | Ubuntu 26.10 (`stonking`), kernel 7.3, aarch64 |
+| Sistema | Ubuntu 26.10 (`stonking`), kernel 7.3, ARM64 (`aarch64`) |
 | CPU y memoria | 6 vCPU, 3.3 GiB de RAM, 3.8 GiB de swap |
 | Disco | 25 GB |
 

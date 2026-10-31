@@ -1,6 +1,6 @@
 # Paso 3 de 7: Descarga y compilación
 
-**Objetivo:** obtener los programas de Zabbix a partir del código oficial. La compilación tomó 62 segundos con 6 vCPU.
+**Objetivo:** obtener los programas de Zabbix a partir del código oficial. Es igual en ARM64 y AMD64. La compilación tomó 62 segundos en la instalación de referencia (ARM64, 6 vCPU); el tiempo varía según el equipo.
 
 ```mermaid
 flowchart LR
@@ -85,6 +85,12 @@ ldd /usr/local/sbin/zabbix_server | grep -c 'not found'
 zabbix_server (Zabbix) 8.0.0rc3
 zabbix_agent2 (Zabbix) 8.0.0rc3
 0
+```
+
+Para confirmar la arquitectura del programa compilado:
+
+```bash
+file -L /usr/local/sbin/zabbix_server | grep -oE 'ARM aarch64|x86-64'
 ```
 
 El `0` significa que no falta ninguna librería.

@@ -35,6 +35,8 @@ go version; psql --version; nginx -v; php -v | head -1
 systemctl is-active postgresql nginx php8.5-fpm
 ```
 
+Salida en ARM64. En AMD64, `go version` termina en `linux/amd64`:
+
 ```text
 go version go1.27.1 linux/arm64
 psql (PostgreSQL) 18.6 (Ubuntu 18.6-3build2)

@@ -11,7 +11,7 @@ flowchart TD
     B --> B1["Problemas 7 y 8"]
     C --> C1["Problemas 6, 9, 10 y 11"]
     D --> D1["Problemas 12 y 13"]
-    E --> E1["Problemas 1, 2, 3 y 5"]
+    E --> E1["Problemas 1, 2, 3, 5, 15 y 16"]
 ```
 
 **Tres comandos que resuelven la mayoría de los diagnósticos:**
@@ -38,6 +38,8 @@ sudo tail -50 /var/log/nginx/error.log
 | [12](#12-el-indicador-zbx-está-en-rojo) | El indicador ZBX está en rojo | 🟡 Posible |
 | [13](#13-fallan-los-chequeos-de-ping) | Fallan los chequeos de ping | 🟡 Posible |
 | [14](#14-el-server-se-queda-sin-memoria) | El server se queda sin memoria | 🟡 Posible |
+| [15](#15-exec-format-error) | `Exec format error` | 🟡 Posible |
+| [16](#16-apt-no-encuentra-el-paquete-para-tu-arquitectura) | `apt` no encuentra el paquete para tu arquitectura | 🟡 Posible |
 
 🔴 **Ocurrió:** pasó en esta instalación y la solución se aplicó.
 🟡 **Posible:** no pasó aquí. Es una guía de diagnóstico para problemas habituales; los mensajes exactos pueden variar.
@@ -50,9 +52,10 @@ sudo tail -50 /var/log/nginx/error.log
 
 | | |
 |---|---|
+| **Afecta a** | ARM64 y AMD64: el paquete tiene la misma dependencia en ambas |
 | **Síntoma** | `zabbix-server-pgsql` tiene dependencias que no se pueden resolver en Ubuntu 26.10 |
 | **Causa** | El repositorio solo llega a Ubuntu 26.04. Su paquete pide `libsnmp40t64`, y 26.10 trae `libsnmp45` |
-| **Solución** | Compilar desde el código, como en esta guía |
+| **Solución** | Compilar desde el código, como en esta guía, o usar [Ubuntu 26.04 con paquetes](alternativa-paquetes-26.04.md) |
 
 ```mermaid
 flowchart LR
@@ -280,6 +283,36 @@ sudo grep -iE 'out of memory|cache' /var/log/zabbix/zabbix_server.log | tail
 | Se llena la caché de Zabbix | Subir `CacheSize` en `zabbix_server.conf` |
 | PostgreSQL usa demasiado | Bajar `shared_buffers` en `conf.d/zabbix.conf` |
 | Nada alcanza | Agregar RAM: Zabbix da 8 GiB como ejemplo para 1 000 métricas |
+
+## 15. `Exec format error`
+
+| | |
+|---|---|
+| **Síntoma** | `cannot execute binary file: Exec format error` al ejecutar `zabbix_server` |
+| **Causa** | El programa se compiló o descargó para otra arquitectura |
+| **Solución** | Compila en el mismo tipo de server donde lo vas a ejecutar |
+
+```bash
+uname -m
+file -L /usr/local/sbin/zabbix_server
+```
+
+`uname -m` y `file` deben coincidir: `x86_64` con `x86-64`, o `aarch64` con `ARM aarch64`.
+
+## 16. `apt` no encuentra el paquete para tu arquitectura
+
+| | |
+|---|---|
+| **Síntoma** | `Unable to locate package` o `404 Not Found` al usar el repositorio de Zabbix |
+| **Causas** | Tu Ubuntu no tiene repositorio de Zabbix, como 26.10, o la arquitectura está fijada a otra en `apt` |
+
+```bash
+dpkg --print-architecture
+. /etc/os-release; echo "$VERSION_CODENAME"
+grep -rh '^Architectures' /etc/apt/sources.list.d/ 2>/dev/null
+```
+
+Si tu versión es 26.10, [compila desde el código](03-compilacion.md). No cambies `resolute` por `stonking` ni al revés en los repositorios.
 
 ---
 

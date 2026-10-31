@@ -25,7 +25,29 @@ sequenceDiagram
 
 Si un dato no aparece, cada comprobación de abajo te dice en qué tramo buscar.
 
-## Lista de comprobación
+## Comprobación automática
+
+Funciona igual en ARM64 y AMD64, y no cambia nada en el server:
+
+```bash
+cd ~/Zabbix-8-rc3-Instalacion
+scripts/verificar.sh
+```
+
+Salida en la instalación de referencia (recortada):
+
+```text
+✅ Servicio activo: zabbix-server
+✅ Arranque automático: zabbix-server
+✅ Puerto en escucha: 10051
+✅ El agente responde: 8.0.0rc3
+✅ La web responde: HTTP 200
+✅ La API responde: "result":"8.0.0"
+
+Todo correcto.
+```
+
+## Lista de comprobación manual
 
 | # | Qué comprobar | Comando | Resultado esperado |
 |---|---|---|---|
