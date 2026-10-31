@@ -1,0 +1,21 @@
+[Unit]
+Description=Zabbix Server 8.0 (compilado desde fuente)
+After=network-online.target postgresql.service
+Wants=network-online.target
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=zabbix
+Group=zabbix
+RuntimeDirectory=zabbix-server
+RuntimeDirectoryMode=0755
+LogsDirectory=zabbix
+ExecStart=/usr/local/sbin/zabbix_server -f -c /etc/zabbix/zabbix_server.conf
+Restart=on-failure
+RestartSec=10s
+TimeoutStopSec=300s
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
