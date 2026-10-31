@@ -67,6 +67,13 @@ sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t
 ```
 
+Aplica también la [mitigación de seguridad de PHP](seguridad-php.md). `php8.5-fpm` debe estar en `8.5.4-0ubuntu1.5` o superior:
+
+```bash
+dpkg-query -W -f='${Version}\n' php8.5-fpm
+echo 'php_admin_flag[session.upload_progress.enabled] = off' | sudo tee -a /etc/zabbix/php-fpm.conf
+```
+
 ## 5. Arrancar
 
 ```bash

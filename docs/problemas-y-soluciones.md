@@ -12,6 +12,8 @@ flowchart TD
     C --> C1["Problemas 6, 9, 10 y 11"]
     D --> D1["Problemas 12 y 13"]
     E --> E1["Problemas 1, 2, 3, 5, 15 y 16"]
+    A --> G["Dudas de seguridad"]
+    G --> G1["Problema 17"]
 ```
 
 **Tres comandos que resuelven la mayoría de los diagnósticos:**
@@ -40,6 +42,7 @@ sudo tail -50 /var/log/nginx/error.log
 | [14](#14-el-server-se-queda-sin-memoria) | El server se queda sin memoria | 🟡 Posible |
 | [15](#15-exec-format-error) | `Exec format error` | 🟡 Posible |
 | [16](#16-apt-no-encuentra-el-paquete-para-tu-arquitectura) | `apt` no encuentra el paquete para tu arquitectura | 🟡 Posible |
+| [17](#17-php-muestra-859-estoy-vulnerable) | PHP muestra `8.5.9`: ¿estoy vulnerable? | 🟡 Posible |
 
 🔴 **Ocurrió:** pasó en esta instalación y la solución se aplicó.
 🟡 **Posible:** no pasó aquí. Es una guía de diagnóstico para problemas habituales; los mensajes exactos pueden variar.
@@ -313,6 +316,16 @@ grep -rh '^Architectures' /etc/apt/sources.list.d/ 2>/dev/null
 ```
 
 Si tu versión es 26.10, [compila desde el código](03-compilacion.md). No cambies `resolute` por `stonking` ni al revés en los repositorios.
+
+## 17. PHP muestra `8.5.9`: ¿estoy vulnerable?
+
+| | |
+|---|---|
+| **Síntoma** | Los avisos piden PHP 8.5.12, pero `php -v` muestra `8.5.9` |
+| **Causa** | Ubuntu agrega los parches sin cambiar la versión base de PHP |
+| **Qué hacer** | Comprobar la versión del paquete, no la de PHP |
+
+Revisa los pasos en [Seguridad de PHP](seguridad-php.md#paso-1-comprueba-si-tienes-el-parche).
 
 ---
 

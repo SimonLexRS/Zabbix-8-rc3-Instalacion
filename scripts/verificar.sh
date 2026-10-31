@@ -32,5 +32,19 @@ a=$(curl -s -m 10 -H 'Content-Type: application/json-rpc' \
   http://127.0.0.1/api_jsonrpc.php | grep -oE '"result":"[^"]+"')
 [ -n "$a" ] && ok "La API responde: $a" || mal "La API no responde"
 
+# Seguridad de PHP: ver docs/seguridad-php.md
+log=$(ls /usr/share/doc/php*-fpm/changelog.Debian.gz 2>/dev/null | head -1)
+if [ -n "$log" ] && zcat "$log" | grep -q 'CVE-2026-109618'; then
+  ok "PHP tiene el parche de CVE-2026-109618 y 109619"
+else
+  mal "PHP sin el parche de CVE-2026-109618 y 109619"
+fi
+
+if grep -REqs '^[^;]*session\.upload_progress\.enabled\][[:space:]]*=[[:space:]]*(off|0)' /etc/php/*/fpm/pool.d/; then
+  ok "Mitigación de CVE-2026-115560 en el pool de PHP"
+else
+  mal "Falta la mitigación de CVE-2026-115560 en el pool de PHP"
+fi
+
 echo
 [ "$fallos" -eq 0 ] && echo "Todo correcto." || { echo "Comprobaciones fallidas: $fallos"; exit 1; }

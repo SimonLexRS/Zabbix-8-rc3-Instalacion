@@ -23,6 +23,20 @@ echo "Disco libre  : ${disk_gib} GiB"
 ocupados=$(ss -tln | awk '{print $4}' | grep -E ':(80|5432|10050|10051)$' | sed 's/.*://' | sort -un | tr '\n' ' ')
 echo "Puertos en uso: ${ocupados:-ninguno de 80, 5432, 10050 y 10051}"
 
+case "${VERSION_ID:-}" in
+  26.04) php_min="8.5.4-0ubuntu1.5" ;;
+  26.10) php_min="8.5.9-0ubuntu2.1" ;;
+  *)     php_min="" ;;
+esac
+php_cand=$(apt-cache policy php8.5-fpm 2>/dev/null | awk '/Candidate:/ {print $2}')
+if [ -n "$php_min" ] && [ -n "$php_cand" ] && [ "$php_cand" != "(none)" ]; then
+  if dpkg --compare-versions "$php_cand" ge "$php_min"; then
+    echo "PHP          : $php_cand, con el parche de CVE-2026-109618 y 109619"
+  else
+    echo "PHP          : $php_cand, SIN el parche. Ejecuta apt-get update (docs/seguridad-php.md)"
+  fi
+fi
+
 case "${ID:-}-${VERSION_ID:-}" in
   ubuntu-26.04) echo "Método       : paquetes oficiales (docs/alternativa-paquetes-26.04.md)" ;;
   ubuntu-26.10) echo "Método       : compilar desde fuente (docs/01-requisitos.md)" ;;

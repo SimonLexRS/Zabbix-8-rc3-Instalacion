@@ -47,6 +47,15 @@ active
 active
 ```
 
+> [!IMPORTANT]
+> **Comprueba que PHP tenga el parche de seguridad.** `php -v` no basta: mira la versión del paquete.
+>
+> ```bash
+> dpkg-query -W -f='${Version}\n' php8.5-fpm
+> ```
+>
+> En Ubuntu 26.10 debe ser `8.5.9-0ubuntu2.1` o superior. [Ver por qué](seguridad-php.md).
+
 > [!NOTE]
 > Las versiones pueden ser más recientes si Ubuntu publicó actualizaciones. Si cambia la versión de PHP, ajusta `8.5` en las rutas y comandos de esta guía.
 

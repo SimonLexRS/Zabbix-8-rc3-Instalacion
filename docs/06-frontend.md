@@ -47,6 +47,9 @@ Ambas pruebas deben terminar en `test is successful`. El pool de PHP usa estos v
 | `max_execution_time` | 300 | 300 |
 | `max_input_time` | 300 | 300 |
 
+> [!IMPORTANT]
+> El pool también incluye `php_admin_flag[session.upload_progress.enabled] = off`, la mitigación de [CVE-2026-115560](seguridad-php.md). Zabbix no usa esa función.
+
 > [!TIP]
 > La zona horaria de PHP es `UTC`, igual que la del sistema. Para usar la tuya, cambia `date.timezone` en el archivo del pool; por ejemplo, `America/La_Paz`.
 

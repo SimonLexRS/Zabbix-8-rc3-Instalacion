@@ -13,6 +13,9 @@ Guía paso a paso para instalar **Zabbix 8.0.0rc3** en servidores **ARM64** y **
 > [!WARNING]
 > **RC3 es una versión candidata.** Úsala para probar y aprender, no en producción.
 
+> [!CAUTION]
+> **Vulnerabilidades críticas de PHP (octubre de 2026):** actualiza PHP y aplica la mitigación antes de exponer el server. [Revisa aquí si te afecta](docs/seguridad-php.md).
+
 ## ¿Qué camino te toca?
 
 Averigua tu arquitectura:
@@ -106,7 +109,7 @@ flowchart TD
 | [6. Frontend](docs/06-frontend.md) | Publicar la interfaz web | Página de login visible |
 | [7. Verificación](docs/07-verificacion.md) | Comprobar todo de punta a punta | El host recibe datos |
 
-**¿Algo falló?** Ve a [Problemas y soluciones](docs/problemas-y-soluciones.md). **¿Quieres revisar todo de una vez?** Ejecuta [`scripts/verificar.sh`](scripts/verificar.sh).
+**¿Algo falló?** Ve a [Problemas y soluciones](docs/problemas-y-soluciones.md). **¿Quieres revisar todo de una vez?** Ejecuta [`scripts/verificar.sh`](scripts/verificar.sh). **Seguridad:** [Vulnerabilidades de PHP](docs/seguridad-php.md).
 
 ## Entorno de la instalación de referencia
 
@@ -121,6 +124,7 @@ flowchart TD
 | Tema | Situación | Qué hacer |
 |---|---|---|
 | Contraseña | Zabbix inicia con `Admin` / `zabbix` | Cámbiala al entrar por primera vez |
+| PHP | Hay vulnerabilidades críticas recientes | Sigue [Seguridad de PHP](docs/seguridad-php.md) |
 | Actualizaciones | Nada de Zabbix se actualiza con `apt` | Para la 8.0.0 final, vuelve a compilar |
 | Capacidad | Zabbix da 2 CPU y 8 GiB de RAM como ejemplo para 1 000 métricas | Trata 3.3 GiB como laboratorio |
 | Cifrado | El frontend usa HTTP en el puerto 80 | Agrega TLS si sale de una red de pruebas |
