@@ -87,13 +87,13 @@ zabbix_agent2 (Zabbix) 8.0.0rc3
 0
 ```
 
+El `0` significa que no falta ninguna librería.
+
 Para confirmar la arquitectura del programa compilado:
 
 ```bash
 file -L /usr/local/sbin/zabbix_server | grep -oE 'ARM aarch64|x86-64'
 ```
-
-El `0` significa que no falta ninguna librería.
 
 > [!TIP]
 > Conserva `~/zabbix-8.0.0rc3`: los pasos 4 y 6 usan archivos de ahí.
